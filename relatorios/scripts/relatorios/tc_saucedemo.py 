@@ -1,0 +1,38 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from datetime import datetime
+import time
+
+
+start_time = datetime.now()
+print(f"Início do teste: {start_time}")
+driver = webdriver.Chrome()
+
+try:
+
+    driver.get("https://www.saucedemo.com/")
+
+  
+    username_input = driver.find_element(By.ID, "user-name")
+    password_input = driver.find_element(By.ID, "password")
+    login_button = driver.find_element(By.ID, "login-button")
+
+    username_input.send_keys("standard_user")
+    password_input.send_keys("secret_sauce")
+    login_button.click()
+
+   
+    time.sleep(2)  # tempo para carregar
+    current_url = driver.current_url
+    assert "inventory" in current_url, "Não foi redirecionado para a página de produtos"
+    print("Login bem-sucedido.")
+
+    status = "Passou"
+except Exception as e:
+    print(f"Erro no teste: {e}")
+    status = "Falhou"
+finally:
+    end_time = datetime.now()
+    print(f"Fim do teste: {end_time}")
+    print(f"Duração: {end_time - start_time}")
+    driver.quit()
